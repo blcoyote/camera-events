@@ -1,6 +1,11 @@
 services:
     camera-events:
-        image: ghcr.io/blcoyote/camera-events:latest
+        image: camera-events
+        pull_policy: build
+        build:
+            dockerfile: ./Dockerfile
+            args:
+                - image=camera-events
         volumes:
             - camera_events_logs:/app/logs/
         networks:
