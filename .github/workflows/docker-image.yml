@@ -50,7 +50,7 @@ jobs:
       - name: Delete Package Versions
         uses: actions/delete-package-versions@v5
         with:
-          package-name: camera-events-service
+          package-name: camera-events
           package-type: container
           num-old-versions-to-delete: 0
           min-versions-to-keep: 1
