@@ -1,0 +1,13 @@
+fastapi[all]==0.115.5
+uvicorn[standard]==0.32.*
+pydantic[dotenv]==2.5.*
+pydantic-settings==2.2.*
+requests==2.32.*
+loguru==0.7.*
+python-multipart==0.0.9
+python-jose[cryptography]==3.3.*
+passlib==1.7.*
+bcrypt==3.2.*
+asyncio==3.4.*
+firebase-admin==6.2.*
+redis[hiredis]==5.0.*
