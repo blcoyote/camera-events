@@ -31,25 +31,25 @@ services:
             - traefik.http.routers.cameraevents.tls.certresolver=lets-encrypt
             - traefik.http.services.cameraevents.loadbalancer.server.port=80
 
-    camera-events-redis:
-        image: redis:latest
-        container_name: camera-events-redis
-        restart: always
-        ports:
-            - 6379:6379
-        networks:
-            - datastorage
-            - web
-        volumes:
-            - camera_events_redis:/root/redis
-        environment:
-            - REDIS_PASSWORD=$REDIS_PASSWORD
-            - REDIS_PORT=6379
-            - REDIS_DATABASES=1
-        command:
-            - /bin/sh
-            - -c
-            - redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}
+    # camera-events-redis:
+    #     image: redis:latest
+    #     container_name: camera-events-redis
+    #     restart: always
+    #     ports:
+    #         - 6379:6379
+    #     networks:
+    #         - datastorage
+    #         - web
+    #     volumes:
+    #         - camera_events_redis:/root/redis
+    #     environment:
+    #         - REDIS_PASSWORD=$REDIS_PASSWORD
+    #         - REDIS_PORT=6379
+    #         - REDIS_DATABASES=1
+    #     command:
+    #         - /bin/sh
+    #         - -c
+    #         - redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}
 networks:
     web:
         name: camera_events_web

@@ -60,10 +60,7 @@ export const App = () => {
     <JotaiProvider store={store}>
       <QueryClientProvider client={queryClient}>
         <FirebaseNotificationProvider fcmToken={fcmToken}>
-          <RouterProvider
-            router={router}
-            future={{ v7_startTransition: true }}
-          />
+          <RouterProvider router={router} />
           <ToastContainer />
         </FirebaseNotificationProvider>
       </QueryClientProvider>
