@@ -1,9 +1,10 @@
 name: Bump version
 on:
   pull_request:
-    types: [closed]
+    types:
+      - closed
     branches:
-      - master
+      - main
 
 jobs:
   build:
