@@ -1,5 +1,4 @@
 name: Create and publish a Docker image
-
 on:
   push:
     branches:
@@ -14,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      actions: write
+      checks: write
 
     steps:
       - name: Checkout repository
@@ -25,6 +25,7 @@ jobs:
         uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
           WITH_V: true
 
       - name: Log in to the Container registry
