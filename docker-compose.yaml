@@ -52,9 +52,11 @@ services:
     #         - redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}
 networks:
     web:
-        name: camera_events_web
+        name: web
+        external: true
     datastorage:
-        name: camera_events_datastorage
+        name: datastorage
+        external: true
 volumes:
     camera_events_redis:
         name: camera_events_redis
