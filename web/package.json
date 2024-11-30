@@ -4,8 +4,8 @@
   "version": "0.2.2",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "dev-local": "VITE_env=local && vite --host",
+    "dev": "vite --host --config vite.config.dev.ts",
+    "local": "vite --host --config vite.config.local.ts",
     "build": "tsc && vite build",
     "preview": "vite preview --host",
     "serve": "serve -s dist",

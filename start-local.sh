@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Start the local server
-docker compose -f docker-compose.local.yaml up -d
+docker compose -f docker-compose.local.yaml up
