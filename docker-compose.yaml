@@ -1,6 +1,7 @@
 services:
     camera-events:
         image: camera-events
+        pull_policy: build
         build:
             dockerfile: ./Dockerfile
             args:
