@@ -1,6 +1,7 @@
 services:
     camera-events:
         image: ghcr.io/blcoyote/camera-events:latest
+        pull_policy: always
         volumes:
             - camera_events_logs:/app/logs/
         networks:
