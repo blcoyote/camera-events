@@ -13,7 +13,6 @@ services:
             - web
         ports:
             - 8000:80
-        #image: ghcr.io/blcoyote/camera-events-service:latest
         environment:
             - MAX_WORKERS=1
             - UVICORN_APP_VERSION=0.2.0
