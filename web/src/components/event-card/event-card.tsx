@@ -1,5 +1,5 @@
 import type { CameraEvent } from "../../models/camera-event.model";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import dayjs from "dayjs";
 import { HiFilm, HiPhoto } from "react-icons/hi2";
 import { CameraNames } from "../../config/enum-camera-names";
