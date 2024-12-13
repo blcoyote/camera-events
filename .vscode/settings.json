@@ -1,3 +1,4 @@
 {
-  "sonarlint.analysisExcludesStandalone": "**/venv/**"
+  "sonarlint.analysisExcludesStandalone": "**/venv/**",
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true
 }
