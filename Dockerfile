@@ -7,7 +7,7 @@ ARG BUILD
 ENV VITE_BUILD_VERSION=$BUILD 
 
 FROM base AS build
-RUN npm run build
+RUN pnpm run build
 
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
 COPY ./api/requirements.txt /app/requirements.txt
