@@ -71,8 +71,8 @@ export default ({ mode }: { mode: string }) => {
             if (id.includes("firebase")) {
               return "@firebase";
             }
-            if (id.includes("framer")) {
-              return "@framer";
+            if (id.includes("motion")) {
+              return "@motion";
             }
           },
         },
