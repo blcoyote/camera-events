@@ -46,7 +46,7 @@ export const EventContainer = (props: EventContainerProps) => {
             title="Download Snapshot"
           >
             <a
-              href={`${baseUrl}/api/v2/downloads/${
+              href={`${baseUrl()}/api/v2/downloads/${
                 event?.id
               }/snapshot.jpg?token=${sessionStorage.getItem("fbtoken")}`}
             >
