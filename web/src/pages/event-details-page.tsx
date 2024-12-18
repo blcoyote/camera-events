@@ -5,7 +5,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { useEventSnapshot } from "../hooks/use-event";
-import { EventContainer } from "../components/event-card/event-card";
+import { EventCard } from "../components/event-card/event-card";
 import { motion } from "motion/react";
 import { useGetCameraEventDetailsQuery } from "../services/camera-api";
 import { HiArrowLeft } from "react-icons/hi2";
@@ -43,7 +43,7 @@ export const Component = () => {
           <HiArrowLeft className="text-secondary" />
         </button>
         {eventData && (
-          <EventContainer
+          <EventCard
             event={eventData}
             isError={isError}
             snapshotData={snapshotData}

@@ -4,13 +4,13 @@ import dayjs from "dayjs";
 import { HiFilm, HiPhoto } from "react-icons/hi2";
 import { CameraNames } from "../../config/enum-camera-names";
 
-interface EventContainerProps {
+interface EventCardProps {
   event?: CameraEvent;
   isError: boolean;
   snapshotData?: string;
 }
 
-export const EventContainer = (props: EventContainerProps) => {
+export const EventCard = (props: EventCardProps) => {
   const { event, isError, snapshotData } = props;
   const image = snapshotData && `data:image/jpeg;base64,${snapshotData}`;
 
@@ -49,7 +49,8 @@ export const EventContainer = (props: EventContainerProps) => {
                 event?.id
               }/snapshot.jpg?token=${sessionStorage.getItem("fbtoken")}`}
               download
-              target="_self"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <HiPhoto size={32} className="cursor-pointer text-secondary" />
             </a>
@@ -65,7 +66,8 @@ export const EventContainer = (props: EventContainerProps) => {
                 event?.id
               }/clip.mp4?token=${sessionStorage.getItem("fbtoken")}`}
               download
-              target="_self"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <HiFilm size={32} className="cursor-pointer text-secondary" />
             </a>
