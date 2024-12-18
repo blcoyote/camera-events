@@ -48,6 +48,7 @@ export const EventContainer = (props: EventContainerProps) => {
               href={`${window.location.origin}/api/v2/downloads/${
                 event?.id
               }/snapshot.jpg?token=${sessionStorage.getItem("fbtoken")}`}
+              download
               target="_self"
             >
               <HiPhoto size={32} className="cursor-pointer text-secondary" />
@@ -63,6 +64,7 @@ export const EventContainer = (props: EventContainerProps) => {
               href={`${window.location.origin}/api/v2/downloads/${
                 event?.id
               }/clip.mp4?token=${sessionStorage.getItem("fbtoken")}`}
+              download
               target="_self"
             >
               <HiFilm size={32} className="cursor-pointer text-secondary" />
