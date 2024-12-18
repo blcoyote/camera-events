@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 import dayjs from "dayjs";
 import { HiFilm, HiPhoto } from "react-icons/hi2";
 import { CameraNames } from "../../config/enum-camera-names";
-import { Link } from "react-router-dom";
 
 interface EventContainerProps {
   event?: CameraEvent;
