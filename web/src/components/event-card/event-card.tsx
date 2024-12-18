@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 import dayjs from "dayjs";
 import { HiFilm, HiPhoto } from "react-icons/hi2";
 import { CameraNames } from "../../config/enum-camera-names";
-import { baseUrl } from "../../config/service";
 
 interface EventContainerProps {
   event?: CameraEvent;
@@ -46,10 +45,9 @@ export const EventContainer = (props: EventContainerProps) => {
             title="Download Snapshot"
           >
             <a
-              href={`${baseUrl()}/api/v2/downloads/${
+              href={`${window.location.origin}/api/v2/downloads/${
                 event?.id
               }/snapshot.jpg?token=${sessionStorage.getItem("fbtoken")}`}
-              target="_blank"
             >
               <HiPhoto size={32} className="cursor-pointer text-secondary" />
             </a>
@@ -61,10 +59,9 @@ export const EventContainer = (props: EventContainerProps) => {
             title=""
           >
             <a
-              href={`${baseUrl()}/api/v2/downloads/${
+              href={`${window.location.origin}/api/v2/downloads/${
                 event?.id
               }/clip.mp4?token=${sessionStorage.getItem("fbtoken")}`}
-              target="_blank"
             >
               <HiFilm size={32} className="cursor-pointer text-secondary" />
             </a>
