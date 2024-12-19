@@ -24,11 +24,10 @@ export const Component = () => {
   useEffect(() => {
     PullToRefresh.init({
       mainElement: "body",
-      onRefresh() {
+      onRefresh: () => {
         return refetch();
       },
     });
-    return PullToRefresh.destroyAll();
   }, []);
 
   return (
