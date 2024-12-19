@@ -20,6 +20,9 @@ export const Component = () => {
 
   useEffect(() => {
     PullToRefresh.init({
+      instructionsPullToRefresh: "Træk for at genopfriske",
+      instructionsReleaseToRefresh: "Slip for at genopfriske",
+      instructionsRefreshing: "Genopfrisker",
       mainElement: "body",
     });
   }, []);
