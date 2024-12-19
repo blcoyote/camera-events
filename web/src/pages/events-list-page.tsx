@@ -19,7 +19,9 @@ export const Component = () => {
   useEffect(() => {
     PullToRefresh.init({
       mainElement: "body",
-      onRefresh: refetch,
+      onRefresh: () => {
+        refetch();
+      },
     });
   }, []);
 
