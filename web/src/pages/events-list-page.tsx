@@ -24,8 +24,8 @@ export const Component = () => {
   useEffect(() => {
     PullToRefresh.init({
       mainElement: "body",
-      onRefresh: () => {
-        refetch();
+      onRefresh() {
+        return refetch();
       },
     });
     return PullToRefresh.destroyAll();
