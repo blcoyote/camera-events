@@ -12,21 +12,15 @@ export const Component = () => {
   const { eventLimit } = useSettings();
   const [user] = useIdToken(auth);
   const token = user?.getIdToken();
-  const { data, isLoading, isFetching, refetch } = useGetCameraEventsQuery(
-    eventLimit,
-    {
-      skip: !token,
-    }
-  );
+  const { data, isLoading, isFetching } = useGetCameraEventsQuery(eventLimit, {
+    skip: !token,
+  });
 
   const loading = isFetching || isLoading;
 
   useEffect(() => {
     PullToRefresh.init({
       mainElement: "body",
-      onRefresh: () => {
-        return refetch();
-      },
     });
   }, []);
 
