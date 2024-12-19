@@ -12,23 +12,31 @@ export const Component = () => {
   const { eventLimit } = useSettings();
   const [user] = useIdToken(auth);
   const token = user?.getIdToken();
-  const { data, isLoading, refetch } = useGetCameraEventsQuery(eventLimit, {
-    skip: !token,
-  });
+  const { data, isLoading, isFetching, refetch } = useGetCameraEventsQuery(
+    eventLimit,
+    {
+      skip: !token,
+    }
+  );
+
+  const loading = isFetching || isLoading;
 
   useEffect(() => {
     PullToRefresh.init({
       mainElement: "body",
-      onRefresh: refetch,
+      onRefresh: () => {
+        refetch();
+      },
     });
+    return PullToRefresh.destroyAll();
   }, []);
 
   return (
     <div className="grid content-center pt-5 lg:grid-cols-2 gap-4 w-max-dvw">
-      {isLoading && [1, 2, 3].map((key) => <EventListCardLoader key={key} />)}
-      {!isLoading &&
+      {loading && [1, 2, 3].map((key) => <EventListCardLoader key={key} />)}
+      {!loading &&
         data?.map((event) => (
-          <EventListCard key={event.id} {...event} isLoading={isLoading} />
+          <EventListCard key={event.id} {...event} isLoading={loading} />
         ))}
     </div>
   );
