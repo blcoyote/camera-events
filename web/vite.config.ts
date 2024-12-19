@@ -33,6 +33,20 @@ export default ({ mode }: { mode: string }) => {
         ],
       }),
       react(),
+      VitePWA({
+        registerType: "autoUpdate",
+        injectRegister: "auto", // I register SW in app.ts, disable auto registration
+        // minimum PWA
+        includeAssets: [
+          "favicon.ico",
+          "robots.txt",
+          "*.svg",
+          "*.{png,ico}",
+          "*.{json}",
+          "*.js",
+        ],
+        workbox: {},
+      }),
     ],
     optimizeDeps: {
       esbuildOptions: {
