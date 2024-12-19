@@ -9,50 +9,42 @@ import PullToRefresh from "pulltorefreshjs";
 import { useEffect } from "react";
 
 export const Component = () => {
-    const { eventLimit } = useSettings();
-    const [user] = useIdToken(auth);
-    const token = user?.getIdToken();
-    const { data, isLoading, refetch } = useGetCameraEventsQuery(eventLimit, {
-        skip: !token,
+  const { eventLimit } = useSettings();
+  const [user] = useIdToken(auth);
+  const token = user?.getIdToken();
+  const { data, isLoading, refetch } = useGetCameraEventsQuery(eventLimit, {
+    skip: !token,
+  });
+
+  useEffect(() => {
+    PullToRefresh.init({
+      mainElement: "body",
+      onRefresh: refetch,
     });
+  }, []);
 
-    useEffect(() => {
-        PullToRefresh.init({
-            mainElement: "body",
-            onRefresh() {
-                refetch();
-            },
-        });
-    }, []);
-
-    return (
-        <div className="grid content-center pt-5 lg:grid-cols-2 gap-4 w-max-dvw">
-            {isLoading &&
-                [1, 2, 3].map((key) => <EventListCardLoader key={key} />)}
-            {!isLoading &&
-                data?.map((event) => (
-                    <EventListCard
-                        key={event.id}
-                        {...event}
-                        isLoading={isLoading}
-                    />
-                ))}
-        </div>
-    );
+  return (
+    <div className="grid content-center pt-5 lg:grid-cols-2 gap-4 w-max-dvw">
+      {isLoading && [1, 2, 3].map((key) => <EventListCardLoader key={key} />)}
+      {!isLoading &&
+        data?.map((event) => (
+          <EventListCard key={event.id} {...event} isLoading={isLoading} />
+        ))}
+    </div>
+  );
 };
 
 Component.displayName = "EventListLazyRoute";
 
 export function ErrorBoundary() {
-    const error = useRouteError();
-    return isRouteErrorResponse(error) ? (
-        <h1>
-            {error.status} {error.statusText}
-        </h1>
-    ) : (
-        <h1>{error?.toString()}</h1>
-    );
+  const error = useRouteError();
+  return isRouteErrorResponse(error) ? (
+    <h1>
+      {error.status} {error.statusText}
+    </h1>
+  ) : (
+    <h1>{error?.toString()}</h1>
+  );
 }
 
 ErrorBoundary.displayName = "EventListErrorBoundary";
-
