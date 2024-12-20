@@ -39,14 +39,12 @@ export default ({ mode }: { mode: string }) => {
         // minimum PWA
         includeAssets: [
           "favicon.ico",
+          "robots.txt",
           "*.svg",
           "*.{png,ico}",
           "*.{json}",
           "*.js",
         ],
-        strategies: "injectManifest",
-        srcDir: "public",
-        filename: "firebase-messaging-sw.js",
         devOptions: {
           enabled: true,
           /* other options */

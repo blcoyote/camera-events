@@ -44,9 +44,6 @@ export default ({ mode }: { mode: string }) => {
           "*.{json}",
           "*.js",
         ],
-        strategies: "injectManifest",
-        srcDir: "public",
-        filename: "firebase-messaging-sw.js",
         workbox: {
           sourcemap: true,
         },

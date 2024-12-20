@@ -36,6 +36,13 @@ export const App = () => {
     }
   }, [notificationsEnabled, config?.messagingKey]);
 
+  useEffect(() => {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        cameraApi.util.invalidateTags(["CameraEvents"]);
+      }
+    });
+  }, []);
   if (config) {
     onMessageListener().then((payload) => {
       console.log("payload", payload);
