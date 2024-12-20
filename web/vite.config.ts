@@ -45,7 +45,9 @@ export default ({ mode }: { mode: string }) => {
           "*.{json}",
           "*.js",
         ],
-        workbox: {},
+        workbox: {
+          sourcemap: true,
+        },
       }),
     ],
     optimizeDeps: {

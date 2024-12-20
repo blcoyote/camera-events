@@ -16,6 +16,9 @@ export const cameraApi = createApi({
       return headers;
     },
   }),
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
+  refetchOnMountOrArgChange: true,
   tagTypes: ["CameraEvents"],
   endpoints: (builder) => ({
     getCameraEvents: builder.query<CameraEvent[], number>({
