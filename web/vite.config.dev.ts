@@ -45,6 +45,10 @@ export default ({ mode }: { mode: string }) => {
           "*.{json}",
           "*.js",
         ],
+        devOptions: {
+          enabled: true,
+          /* other options */
+        },
         workbox: {},
       }),
     ],
