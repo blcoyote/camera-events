@@ -39,7 +39,6 @@ export default ({ mode }: { mode: string }) => {
         // minimum PWA
         includeAssets: [
           "favicon.ico",
-          "robots.txt",
           "*.svg",
           "*.{png,ico}",
           "*.{json}",
