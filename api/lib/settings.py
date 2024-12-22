@@ -26,6 +26,6 @@ class Settings(BaseSettings):
             "have",
             "stuen",
             "koekken",
-            "reserve",
+            "vaerksted",
         ]
     )
