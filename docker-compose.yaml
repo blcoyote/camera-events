@@ -25,6 +25,7 @@ services:
             - UVICORN_APPID=$UVICORN_APPID
             - UVICORN_MEASUREMENTID=$UVICORN_MEASUREMENTID
             - UVICORN_MESSAGINGKEY=$UVICORN_MESSAGINGKEY
+            - UVICORN_BASEURL=$UVICORN_BASEURL
         labels:
             - traefik.http.routers.cameraevents.rule=Host(`$DNS_NAME`)
             - traefik.http.routers.cameraevents.tls=true
