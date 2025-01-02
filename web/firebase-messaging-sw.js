@@ -29,6 +29,7 @@ channel4Broadcast.onmessage = (event) => {
 	console.log("event data", event.data);
 }
 
+//TODO: remove this to fix double notifications?
 messaging.onBackgroundMessage((payload) => {
 	const notificationTitle = payload.notification.title;
 	
