@@ -4,6 +4,7 @@ import json
 import os
 import base64
 from typing import List
+from urllib.parse import urljoin
 import firebase_admin
 from firebase_admin import credentials, messaging
 from loguru import logger
@@ -49,10 +50,10 @@ def send_topic_push(event: CameraEvent):
                 title=f"Person set i {event.camera}",
                 body=f"id: {event.id}",
                 icon=f"{get_settings().base_url}/pwa-64x64.png",
-                image=f"${get_settings().base_url}/api/v2/attachments/notification/{image_token}"
+                image=f"{get_settings().base_url}/api/v2/attachments/notification/{image_token}"
             ),
             fcm_options=messaging.WebpushFCMOptions(
-                link=f"{get_settings().base_url}/eventnotification/{event.id}",
+                link=urljoin(get_settings().base_url, f"/eventnotification/{event.id}")
             ),
             headers={"Urgency": "high", "TTL": "3600"},
             
@@ -60,7 +61,7 @@ def send_topic_push(event: CameraEvent):
         android=messaging.AndroidConfig(
             notification=messaging.AndroidNotification(
                 title=f"Person set i {event.camera}", body=f"id: {event.id}",
-                icon=f"${get_settings().base_url}/pwa-64x64.png"
+                icon=f"{get_settings().base_url}/pwa-64x64.png"
             ),
             ttl=36000,
             data={
