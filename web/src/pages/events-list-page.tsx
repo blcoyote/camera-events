@@ -12,9 +12,26 @@ export const Component = () => {
   const { eventLimit } = useSettings();
   const [user] = useIdToken(auth);
   const token = user?.getIdToken();
-  const { data, isLoading, isFetching } = useGetCameraEventsQuery(eventLimit, {
-    skip: !token,
-  });
+  const { data, isLoading, isFetching, refetch } = useGetCameraEventsQuery(
+    eventLimit,
+    {
+      skip: !token,
+    }
+  );
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        refetch();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [refetch]);
 
   const loading = isFetching || isLoading;
 
