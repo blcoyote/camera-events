@@ -54,6 +54,20 @@ services:
             - /bin/sh
             - -c
             - redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}
+    camera-events-mongodb:
+        image: mongo:latest
+        container_name: camera-events-mongodb
+        restart: always
+        ports:
+            - 27017:27017
+        networks:
+            - datastorage
+            - web
+        volumes:
+            - camera_events_mongodb:/data/db
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+            - MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
 networks:
     web:
         name: camera_events_web
@@ -68,4 +82,7 @@ volumes:
         driver: local
     camera_events_logs:
         name: camera_events_logs
+        driver: local
+    camera_events_mongodb:
+        name: camera_events_mongodb
         driver: local
