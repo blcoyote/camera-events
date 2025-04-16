@@ -7,29 +7,27 @@ import { useIdToken } from "react-firebase-hooks/auth";
 import { auth } from "../config/firebase";
 import PullToRefresh from "pulltorefreshjs";
 import { useEffect } from "react";
+import ReactDOMServer from 'react-dom/server';
 
 export const Component = () => {
   const { eventLimit } = useSettings();
   const [user] = useIdToken(auth);
   const token = user?.getIdToken();
-  const { data, isLoading, isFetching, refetch } = useGetCameraEventsQuery(
-    eventLimit,
-    {
-      skip: !token,
-    }
-  );
+  const { data, isLoading, isFetching, refetch } = useGetCameraEventsQuery(eventLimit, {
+    skip: !token,
+  });
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
+      if (document.visibilityState === 'visible') {
         refetch();
       }
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [refetch]);
 
@@ -37,10 +35,16 @@ export const Component = () => {
 
   useEffect(() => {
     PullToRefresh.init({
-      instructionsPullToRefresh: "Træk for at genopfriske",
-      instructionsReleaseToRefresh: "Slip for at genopfriske",
-      instructionsRefreshing: "Genopfrisker",
-      mainElement: "body",
+      instructionsPullToRefresh: ReactDOMServer.renderToString(
+        <div className='text-primary'>Træk for at genopfriske</div>
+      ),
+      instructionsReleaseToRefresh: ReactDOMServer.renderToString(
+        <div className='text-primary'>Slip for at genopfriske</div>
+      ),
+      iconArrow: ReactDOMServer.renderToString(<div className='text-primary'>&#8675;</div>),
+      iconRefreshing: ReactDOMServer.renderToString(<div className='text-primary'>&hellip;</div>),
+      instructionsRefreshing: ReactDOMServer.renderToString(<div className='text-primary'>Genopfrisker'</div>),
+      mainElement: 'body',
     });
   }, []);
 
