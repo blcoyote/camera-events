@@ -12,31 +12,28 @@ export const Card = (props: CameraEvent) => {
     };
 
     return (
-        <div
-            tabIndex={0}
-            className="card card-side bg-base-100 shadow-xl cursor-pointer "
-            onClick={navigateToEvent}
-            onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                    navigateToEvent();
-                }
-            }}
-        >
-            <figure>
-                <img src={image} alt="Thumbnail" className="h-fit scale-150" />
-            </figure>
-            <div className="absolute right-2 top-2 badge badge-outline">
-                {CameraNames[props.camera as keyof typeof CameraNames] ??
-                    "Unknown"}
-            </div>
-            <div className="card-body ">
-                <h2 className="card-title text-sm md:text-lg">
-                    {timestamp.format("DD/MM/YYYY HH:mm")}
-                </h2>
-                <p>{`Label: ${props.label}`}</p>
-                <p>{`Probability: ${(props.data.score * 100).toFixed(2)}%`}</p>
-            </div>
+      <div
+        tabIndex={0}
+        className='card card-side bg-base-100 shadow-xl cursor-pointer '
+        onClick={navigateToEvent}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            navigateToEvent();
+          }
+        }}
+      >
+        <figure>
+          <img src={image} alt='Thumbnail' className='h-fit scale-150' />
+        </figure>
+        <div className='absolute right-2 top-2 badge badge-outline'>
+          {CameraNames[props.camera as keyof typeof CameraNames] ?? 'Unknown'}
         </div>
+        <div className='card-body'>
+          <h2 className='card-title text-sm md:text-lg pt-6 md:pt-0'>{timestamp.format('DD/MM/YYYY HH:mm')}</h2>
+          <div>{`Label: ${props.label}`}</div>
+          <div>{`Probability: ${(props.data.score * 100).toFixed(2)}%`}</div>
+        </div>
+      </div>
     );
 };
 
