@@ -30,25 +30,16 @@ export const Component = () => {
   const { data: snapshotData } = useEventSnapshot(id);
 
   return (
-    <div className="flex content-center justify-center">
+    <div className='flex content-center justify-center'>
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <button
-          className="btn btn-sm btn-circle relative top-10 left-2"
-          onClick={navigateToEventsPage}
-        >
-          <HiArrowLeft className="text-secondary" />
+        <button className='btn btn-sm btn-circle relative top-10 left-2' onClick={navigateToEventsPage}>
+          <HiArrowLeft className='text-primary' />
         </button>
-        {eventData && (
-          <EventCard
-            event={eventData}
-            isError={isError}
-            snapshotData={snapshotData}
-          />
-        )}
+        {eventData && <EventCard event={eventData} isError={isError} snapshotData={snapshotData} />}
       </motion.div>
     </div>
   );

@@ -57,7 +57,7 @@ export const Component = () => {
   };
 
   return (
-    <div className="bg-base-100 drop-shadow-sm p-5 mt-5 rounded-box">
+    <div className="bg-base-100 drop-shadow-xs p-5 mt-5 rounded-box">
       <div className="flex gap-5 flex-col justify-items-center">
         <div className="flex flex-col gap-2">
           <h2>Maximum displayed events:</h2>
