@@ -45,12 +45,9 @@ export const Component = () => {
   }, []);
 
   return (
-    <div className="grid content-center pt-5 lg:grid-cols-2 gap-4 w-max-dvw">
+    <div className='grid content-center pt-5 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max-dvw'>
       {loading && [1, 2, 3].map((key) => <EventListCardLoader key={key} />)}
-      {!loading &&
-        data?.map((event) => (
-          <EventListCard key={event.id} {...event} isLoading={loading} />
-        ))}
+      {!loading && data?.map((event) => <EventListCard key={event.id} {...event} isLoading={loading} />)}
     </div>
   );
 };
