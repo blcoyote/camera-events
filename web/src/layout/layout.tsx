@@ -10,7 +10,7 @@ export const Layout = () => {
           <Navbar />
         </div>
         <MenuDrawer />
-        <div className='h-full flex overflow-y-auto flex-col flex-grow'>
+        <div className='h-full flex overflow-y-auto flex-col grow'>
           <UserGuard>
             <div className='drawer-content'>{<Outlet />}</div>
           </UserGuard>
