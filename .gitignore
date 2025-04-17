@@ -15,7 +15,6 @@ node_modules
 dist
 dist-ssr
 *.local
-
 # Editor directories and files
 .idea
 .DS_Store
@@ -26,3 +25,4 @@ dist-ssr
 *.sw?
 .env
 public/firebase-messaging-sw.js
+/web/dev-dist
