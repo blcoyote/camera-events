@@ -1,5 +1,7 @@
 web/dist/
+web/dev-dist
 venv/
-web/node_modules/
 web/.env
 .env
+node_modules
+web/node_modules
