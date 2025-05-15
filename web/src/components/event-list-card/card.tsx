@@ -29,7 +29,7 @@ export const Card = (props: CameraEvent) => {
           {CameraNames[props.camera as keyof typeof CameraNames] ?? 'Unknown'}
         </div>
         <div className='card-body'>
-          <h2 className='card-title text-sm md:text-lg pt-6 md:pt-0'>{timestamp.format('DD/MM/YYYY HH:mm')}</h2>
+          <h2 className='card-title text-sm md:text-lg pt-6 md:pt-2'>{timestamp.format('DD/MM/YYYY HH:mm')}</h2>
           <div>{`Label: ${props.label}`}</div>
           <div>{`Probability: ${(props.data.score * 100).toFixed(2)}%`}</div>
         </div>
