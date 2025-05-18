@@ -10,22 +10,25 @@ def get_settings():
     return Settings() 
 
 class Settings(BaseSettings):
-    model_config = ConfigDict(extra="allow")
-    app_name: str = Field("Frigate API")
-    docs_url: str = Field(os.getenv("UVICORN_DOCS_URL", ""))
-    app_version: str = Field(os.getenv("UVICORN_APP_VERSION", ""))
-    frigate_baseurl: str = Field(os.getenv("UVICORN_FRIGATE_BASEURL", ""))
-    base_url: str = Field(os.getenv("UVICORN_BASEURL", ""))
-    redis_host: str = Field(os.getenv("UVICORN_REDIS_URL", ""))
-    redis_password: str = Field(os.getenv("UVICORN_REDIS_PASSWORD", ""))
-    cameras: List[str] = Field(
-        [
-            "gavl_vest",
-            "garage",
-            "gavl_oest",
-            "have",
-            "stuen",
-            "koekken",
-            "vaerksted",
-        ]
-    )
+    """
+    Application settings loaded from environment variables or defaults.
+    """
+    app_name: str = "Frigate API"
+    docs_url: str = os.getenv("UVICORN_DOCS_URL", "")
+    app_version: str = os.getenv("UVICORN_APP_VERSION", "")
+    frigate_baseurl: str = os.getenv("UVICORN_FRIGATE_BASEURL", "")
+    base_url: str = os.getenv("UVICORN_BASEURL", "")
+    redis_host: str = os.getenv("UVICORN_REDIS_URL", "")
+    redis_password: str = os.getenv("UVICORN_REDIS_PASSWORD", "")
+    cameras: List[str] = [
+        "gavl_vest",
+        "garage",
+        "gavl_oest",
+        "have",
+        "stuen",
+        "koekken",
+        "vaerksted",
+    ]
+
+    class Config:
+        extra = "allow"
