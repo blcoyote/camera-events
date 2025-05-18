@@ -48,4 +48,4 @@ class RedisSetClient:
         Returns:
             Set[str]: Python set containing all members
         """
-        return set(self.client.smembers(set_name))
+        return set(self.client.smembers(set_name)) # type: ignore

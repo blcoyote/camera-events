@@ -17,4 +17,4 @@ def set_temporary_image_token(snapshot_id: str, expire:int = 60*60*24) -> str:
 @logger.catch
 def get_snapshot_id(image_token: str) -> str:
     stored_id = redis_client.get(image_token)
-    return stored_id
+    return str(stored_id) if stored_id is not None else ""

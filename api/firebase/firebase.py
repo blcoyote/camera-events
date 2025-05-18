@@ -1,12 +1,10 @@
-from datetime import datetime
 from functools import lru_cache
 import json
 import os
 import base64
 from typing import List
 from urllib.parse import urljoin
-import firebase_admin
-from firebase_admin import credentials, messaging
+from firebase_admin import credentials, messaging, initialize_app
 from loguru import logger
 from database.redis_datastore import set_temporary_image_token
 from lib.settings import get_settings
@@ -14,14 +12,17 @@ from lib.settings import get_settings
 from models.event_model import CameraEvent
 
 firebase_app = None
-creds_dict = json.loads(base64.b64decode(os.getenv("UVICORN_FIREBASE_CREDENTIALS")))
+firebase_creds_env = os.getenv("UVICORN_FIREBASE_CREDENTIALS")
+if firebase_creds_env is None:
+    raise ValueError("Environment variable 'UVICORN_FIREBASE_CREDENTIALS' is not set.")
+creds_dict = json.loads(base64.b64decode(firebase_creds_env))
 
 firebase_cred = credentials.Certificate(creds_dict)
 topic = "cameraevents"
 
 @lru_cache()
 def get_firebase_app():
-    firebase_app = firebase_admin.initialize_app(firebase_cred)
+    firebase_app = initialize_app(firebase_cred)
     return firebase_app
 
 
