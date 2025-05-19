@@ -1,3 +1,3 @@
 export const baseUrl = () => {
-  return window.location.origin;
+	return window.location.origin;
 };

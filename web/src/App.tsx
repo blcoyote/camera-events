@@ -15,57 +15,57 @@ import { cameraApi } from "./services/camera-api";
 import { useNotifications } from "./hooks/use-notifications";
 
 export const App = () => {
-  const [queryClient] = useState(() => new QueryClient());
-  const dispatch = useAppDispatch();
-  const store = createStore();
-  const [fcmToken, setFcmToken] = useState<string | undefined>(undefined);
-  const [user] = useIdToken(auth);
-  const { loadNotificationSettings, notificationsEnabled } = useNotifications();
+	const [queryClient] = useState(() => new QueryClient());
+	const dispatch = useAppDispatch();
+	const store = createStore();
+	const [fcmToken, setFcmToken] = useState<string | undefined>(undefined);
+	const [user] = useIdToken(auth);
+	const { loadNotificationSettings, notificationsEnabled } = useNotifications();
 
-  const { data: config } = cameraApi.useGetApplicationConfigurationQuery();
+	const { data: config } = cameraApi.useGetApplicationConfigurationQuery();
 
-  user?.getIdToken().then((token) => {
-    dispatch(setToken(token));
-    sessionStorage.setItem("fbtoken", token);
-  });
+	user?.getIdToken().then((token) => {
+		dispatch(setToken(token));
+		sessionStorage.setItem("fbtoken", token);
+	});
 
-  useEffect(() => {
-    loadNotificationSettings();
-    if (notificationsEnabled && config) {
-      getMessageToken(setFcmToken, config.messagingKey);
-    }
-  }, [notificationsEnabled, config?.messagingKey]);
+	useEffect(() => {
+		loadNotificationSettings();
+		if (notificationsEnabled && config) {
+			getMessageToken(setFcmToken, config.messagingKey);
+		}
+	}, [notificationsEnabled, config, loadNotificationSettings]);
 
-  useEffect(() => {
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        cameraApi.util.invalidateTags(["CameraEvents"]);
-      }
-    });
-  }, []);
-  if (config) {
-    onMessageListener().then((payload) => {
-      console.log("payload", payload);
-      if (
-        payload.notification?.title &&
-        payload.notification?.body &&
-        localStorage.getItem("notification-enabled") === "true"
-      ) {
-        toast.info(<ToastMessage payload={payload} />);
-      }
-    });
-  }
+	useEffect(() => {
+		document.addEventListener("visibilitychange", () => {
+			if (document.visibilityState === "visible") {
+				cameraApi.util.invalidateTags(["CameraEvents"]);
+			}
+		});
+	}, []);
+	if (config) {
+		onMessageListener().then((payload) => {
+			console.log("payload", payload);
+			if (
+				payload.notification?.title &&
+				payload.notification?.body &&
+				localStorage.getItem("notification-enabled") === "true"
+			) {
+				toast.info(<ToastMessage payload={payload} />);
+			}
+		});
+	}
 
-  return (
-    <JotaiProvider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <FirebaseNotificationProvider fcmToken={fcmToken}>
-          <RouterProvider router={router} />
-          <ToastContainer />
-        </FirebaseNotificationProvider>
-      </QueryClientProvider>
-    </JotaiProvider>
-  );
+	return (
+		<JotaiProvider store={store}>
+			<QueryClientProvider client={queryClient}>
+				<FirebaseNotificationProvider fcmToken={fcmToken}>
+					<RouterProvider router={router} />
+					<ToastContainer />
+				</FirebaseNotificationProvider>
+			</QueryClientProvider>
+		</JotaiProvider>
+	);
 };
 
 export default App;
