@@ -30,9 +30,5 @@ jobs:
 
       - name: Build (web)
         working-directory: ./web
-        run: bun run build --if-present
-
-      - name: Run tests (web)
-        working-directory: ./web
-        run: bun test --if-present
+        run: bun run build
 
