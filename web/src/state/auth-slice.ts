@@ -1,42 +1,42 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './store';
+import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
+import type { RootState } from "./store";
 
 interface AuthState {
-    isAuthenticated: boolean;
-    user: User | undefined;
-    token: string | undefined;
+	isAuthenticated: boolean;
+	user: User | undefined;
+	token: string | undefined;
 }
 
 const initialState: AuthState = {
-    isAuthenticated: false,
-    user: undefined,
-    token: undefined
+	isAuthenticated: false,
+	user: undefined,
+	token: undefined,
 };
 
-interface  User {
-    userId?: string
-    email?: string
+interface User {
+	userId?: string;
+	email?: string;
 }
 
 const authSlice = createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {
-        login(state, action: PayloadAction<User>) {
-            state.isAuthenticated = true;
-            state.user = action.payload;
-        },
-        setToken(state, action: PayloadAction<string|undefined>){
-            state.token = action.payload
-        },
+	name: "auth",
+	initialState,
+	reducers: {
+		login(state, action: PayloadAction<User>) {
+			state.isAuthenticated = true;
+			state.user = action.payload;
+		},
+		setToken(state, action: PayloadAction<string | undefined>) {
+			state.token = action.payload;
+		},
 
-        logout(state) {
-            state.isAuthenticated = false;
-            state.user = undefined;
-            state.token = undefined
-        },
-        // Add any other authentication-related reducers here
-    },
+		logout(state) {
+			state.isAuthenticated = false;
+			state.user = undefined;
+			state.token = undefined;
+		},
+		// Add any other authentication-related reducers here
+	},
 });
 
 export const { login, logout, setToken } = authSlice.actions;
