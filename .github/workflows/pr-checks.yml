@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies (web)
         working-directory: ./web
-        run: bun install
+        run: npm install -g bun && bun install
 
       - name: Lint (web)
         working-directory: ./web
