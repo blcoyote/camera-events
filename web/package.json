@@ -10,7 +10,7 @@
 		"preview": "vite preview --host",
 		"serve": "serve -s dist",
 		"generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo.svg",
-    "lint": "biome check --write"
+    	"lint": "biome check --write"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^2.7.0",
