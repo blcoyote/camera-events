@@ -1,7 +1,7 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "daisyui" {
-    themes: light --default, dark --prefersdark, cupcake;
+	themes: light --default, dark --prefersdark, cupcake;
 }
 
 /*
@@ -13,12 +13,11 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-
-    *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
-        border-color: var(--color-gray-200, currentcolor);
-    }
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentcolor);
+	}
 }
