@@ -12,9 +12,10 @@ export const Card = (props: CameraEvent) => {
 	};
 
 	return (
-		<div
+		<button
+			type="button"
 			tabIndex={0}
-			className="card card-side bg-base-100 shadow-xl cursor-pointer "
+			className="card card-side bg-base-100 shadow-xl cursor-pointer text-left w-full focus-visible:ring-2  focus-visible:ring-blue-500 "
 			onClick={navigateToEvent}
 			onKeyDown={(e) => {
 				if (e.key === "Enter") {
@@ -35,7 +36,7 @@ export const Card = (props: CameraEvent) => {
 				<div>{`Label: ${props.label}`}</div>
 				<div>{`Probability: ${(props.data.score * 100).toFixed(2)}%`}</div>
 			</div>
-		</div>
+		</button>
 	);
 };
 
@@ -47,17 +48,17 @@ export const CardLoader = () => {
 			<figure>
 				<img src={image} alt="Thumbnail" className="w-44 h-44" />
 			</figure>
-			<div className="absolute right-5 top-5 badge badge-outline"></div>
+			<div className="absolute right-5 top-5 badge badge-outline"/>
 			<div className="card-body pt-4 gap-3">
 				<h2 className="card-title">
-					<div className="skeleton h-7 w-4/6"></div>
+					<div className="skeleton h-7 w-4/6" />
 				</h2>
 
-				<div className="p skeleton h-5 w-1/6"></div>
+				<div className="p skeleton h-5 w-1/6"/>
 
-				<div className="skeleton h-5 w-2/6"></div>
+				<div className="skeleton h-5 w-2/6"/>
 
-				<div className="skeleton h-5 w-3/6"></div>
+				<div className="skeleton h-5 w-3/6"/>
 			</div>
 		</div>
 	);
