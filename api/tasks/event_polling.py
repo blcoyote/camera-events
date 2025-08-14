@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from firebase.firebase import send_multiple_topic_push, send_topic_push
 from tasks.event_tasks import get_events
 from models.event_model import CameraEvent, CameraEventQueryParams
+from services.cache_service import event_cache_service
 
 POLLING_INTERVAL = 30
 
@@ -40,3 +41,6 @@ async def process_events(events: List[CameraEvent]):
             send_multiple_topic_push(events)
     except Exception as e:
         logger.error(f"Error sending event to firebase: {e}")
+    if len(events) > 0:
+        deleted_count = event_cache_service.bust_cache()
+        return {"message": f"Cache busted successfully", "deleted_entries": deleted_count}

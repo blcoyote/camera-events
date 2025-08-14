@@ -1,10 +1,14 @@
 import redis
-from typing import Set
+import json
+from typing import Set, Optional, Any, Union
+from datetime import timedelta
 
 from lib.settings import get_settings
 
 # 30 days in seconds
 THIRTY_DAYS_SECONDS = 30 * 24 * 60 * 60
+# 10 minutes in seconds
+TEN_MINUTES_SECONDS = 10 * 60
 
 class RedisSetClient:
     """
@@ -49,3 +53,66 @@ class RedisSetClient:
             Set[str]: Python set containing all members
         """
         return set(self.client.smembers(set_name)) # type: ignore
+
+    def set_cache(self, key: str, value: Any, ttl_seconds: int = TEN_MINUTES_SECONDS) -> bool:
+        """
+        Set a cache value with TTL.
+        
+        Args:
+            key: Cache key
+            value: Value to cache (will be JSON serialized)
+            ttl_seconds: Time to live in seconds
+            
+        Returns:
+            bool: True if set successfully
+        """
+        try:
+            serialized_value = json.dumps(value, default=str)
+            return bool(self.client.setex(key, ttl_seconds, serialized_value))
+        except Exception:
+            return False
+    
+    def get_cache(self, key: str) -> Optional[Any]:
+        """
+        Get a cache value.
+        
+        Args:
+            key: Cache key
+            
+        Returns:
+            Cached value or None if not found/expired
+        """
+        try:
+            cached_value = self.client.get(key)
+            if cached_value:
+                return json.loads(cached_value)
+            return None
+        except Exception:
+            return None
+    
+    def delete_cache(self, key: str) -> bool:
+        """
+        Delete a cache key.
+        
+        Args:
+            key: Cache key to delete
+            
+        Returns:
+            bool: True if deleted successfully
+        """
+        return bool(self.client.delete(key))
+    
+    def delete_cache_pattern(self, pattern: str) -> int:
+        """
+        Delete all cache keys matching a pattern.
+        
+        Args:
+            pattern: Pattern to match (e.g., "events:*")
+            
+        Returns:
+            int: Number of keys deleted
+        """
+        keys = self.client.keys(pattern)
+        if keys:
+            return self.client.delete(*keys)
+        return 0
