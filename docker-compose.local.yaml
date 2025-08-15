@@ -2,6 +2,7 @@ services:
     camera-events:
         image: camera-events
         pull_policy: build
+        restart: always
         build:
             dockerfile: ./Dockerfile
             args:

@@ -1,6 +1,7 @@
 services:
     camera-events:
         image: ghcr.io/blcoyote/camera-events:latest
+        restart: unless-stopped
         pull_policy: always
         volumes:
             - camera_events_logs:/app/logs/
@@ -34,7 +35,7 @@ services:
     camera-events-redis:
         image: redis:latest
         container_name: camera-events-redis
-        restart: always
+        restart: unless-stopped
         ports:
             - 6379:6379
         networks:
