@@ -1,5 +1,4 @@
-fastapi[all]==0.128.*
-uvicorn[standard]==0.40.*
+fastapi[standard]==0.128.*
 pydantic==2.12.*
 pydantic-settings==2.12.*
 requests==2.32.*
