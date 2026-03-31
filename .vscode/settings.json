@@ -9,5 +9,12 @@
     "reportUnknownLambdaType": "none",
     "reportUnknownParameterType": "none",
     "reportUnknownReturnType": "none"
+  },
+  "chat.tools.terminal.autoApprove": {
+    "/^python -m pytest tests/unit -q --tb=short 2>&1$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "pytest": true
   }
 }
