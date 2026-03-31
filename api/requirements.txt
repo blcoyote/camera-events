@@ -10,3 +10,4 @@ bcrypt==3.2.*
 asyncio==3.4.*
 firebase-admin==6.2.*
 redis[hiredis]==5.0.*
+minio==7.2.*

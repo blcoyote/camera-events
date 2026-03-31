@@ -21,6 +21,10 @@ services:
             - UVICORN_DOCS_URL=$UVICORN_DOCS_URL
             - UVICORN_REDIS_URL=camera-events-redis
             - UVICORN_REDIS_PASSWORD=$REDIS_PASSWORD
+            - MINIO_ENDPOINT=camera-events-minio:9000
+            - MINIO_ROOT_USER=$MINIO_ROOT_USER
+            - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
+            - MINIO_BUCKET=camera-events
             - UVICORN_FIREBASE_CREDENTIALS=$UVICORN_FIREBASE_CREDENTIALS
             - UVICORN_FIREBASE_APIKEY=$UVICORN_FIREBASE_APIKEY
             - UVICORN_AUTHDOMAIN=$UVICORN_AUTHDOMAIN
@@ -36,6 +40,21 @@ services:
             - traefik.http.routers.cameraevents.tls=true
             - traefik.http.routers.cameraevents.tls.certresolver=lets-encrypt
             - traefik.http.services.cameraevents.loadbalancer.server.port=80
+    camera-events-minio:
+        image: minio/minio:latest
+        container_name: camera-events-minio
+        restart: always
+        ports:
+            - 9000:9000
+            - 9001:9001
+        networks:
+            - datastorage
+        volumes:
+            - camera_events_minio:/data
+        environment:
+            - MINIO_ROOT_USER=$MINIO_ROOT_USER
+            - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
+        command: server /data --console-address ":9001"
     camera-events-redis:
         image: redis:latest
         container_name: camera-events-redis
@@ -67,6 +86,9 @@ volumes:
         driver: local
     camera_events_fcmstore:
         name: camera_events_fcmstore
+        driver: local
+    camera_events_minio:
+        name: camera_events_minio
         driver: local
     camera_events_logs:
         name: camera_events_logs

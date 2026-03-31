@@ -20,20 +20,22 @@ creds_dict = json.loads(base64.b64decode(firebase_creds_env))
 firebase_cred = credentials.Certificate(creds_dict)
 topic = "cameraevents"
 
+from firebase_admin import App
+
 @lru_cache()
-def get_firebase_app():
+def get_firebase_app() -> App:
     firebase_app = initialize_app(firebase_cred)
     return firebase_app
 
 
-def subscribe_topic(tokens): # tokens is a list of registration tokens
+def subscribe_topic(tokens: List[str]): # tokens is a list of registration tokens
     response = messaging.subscribe_to_topic(tokens, topic)
     if response.failure_count > 0:
         logger.error(
             f"Failed to subscribe to topic {topic} due to {list(map(lambda e: e.reason, response.errors))}"
         )
 
-def unsubscribe_topic(tokens): # tokens is a list of registration tokens
+def unsubscribe_topic(tokens: List[str]): # tokens is a list of registration tokens
     response = messaging.unsubscribe_from_topic(tokens, topic)
     if response.failure_count > 0:
         logger.error(
@@ -41,10 +43,10 @@ def unsubscribe_topic(tokens): # tokens is a list of registration tokens
         )
 
 @logger.catch()
-def send_topic_push(event: CameraEvent):
+def send_topic_push(event: CameraEvent) -> None:
     image_token = set_temporary_image_token(event.id)
     logger.info(f"Sending push notification for event {event.id} with image token {image_token}")
-    message = messaging.Message(
+    message: messaging.Message = messaging.Message(
         topic=topic,
         webpush=messaging.WebpushConfig(
             notification=messaging.WebpushNotification(
@@ -111,7 +113,7 @@ def send_multiple_topic_push(events: List[CameraEvent]):
     messaging.send(message)
 
 
-def send_token_push(title, body, tokens):
+def send_token_push(title: str, body: str, tokens: List[str]):
     message = messaging.MulticastMessage(
         notification=messaging.Notification(
         title=title,

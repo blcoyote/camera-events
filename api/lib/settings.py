@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     base_url: str = os.getenv("UVICORN_BASEURL", "")
     redis_host: str = os.getenv("UVICORN_REDIS_URL", "")
     redis_password: str = os.getenv("UVICORN_REDIS_PASSWORD", "")
+    minio_endpoint: str = os.getenv("MINIO_ENDPOINT", "camera-events-minio:9000")
+    minio_access_key: str = os.getenv("MINIO_ROOT_USER", "")
+    minio_secret_key: str = os.getenv("MINIO_ROOT_PASSWORD", "")
+    minio_bucket: str = os.getenv("MINIO_BUCKET", "camera-events")
     cameras: List[str] = [
         "gavl_vest",
         "garage",

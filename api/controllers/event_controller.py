@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from firebase.auth import verify_user_check
 from lib.settings import get_settings
-from tasks.event_tasks import get_clip, get_events, get_latest, get_snapshot, get_event
+from tasks.event_tasks import get_clip_cached, get_events, get_latest, get_snapshot_cached, get_event
 from models.event_model import CameraEvent, CameraEventQueryParams
 from services.cache_service import event_cache_service
 from starlette.responses import StreamingResponse
@@ -63,7 +63,7 @@ async def read_event(event_id: str):
 
 @router.get("/{event_id}/snapshot.jpg", status_code=200)
 async def read_event_snapshot(event_id: str):
-    return StreamingResponse(io.BytesIO(get_snapshot(event_id)), media_type="image/jpg")
+    return StreamingResponse(io.BytesIO(get_snapshot_cached(event_id)), media_type="image/jpg")
 
 
 @router.get("/{camera}/latest.jpg", status_code=200)
@@ -73,4 +73,4 @@ async def read_event_latest(camera: str):
 
 @router.get("/{event_id}/clip.mp4", status_code=200)
 async def read_event_clip(event_id: str):
-    return StreamingResponse(io.BytesIO(get_clip(event_id)), media_type="video/mp4")
+    return StreamingResponse(io.BytesIO(get_clip_cached(event_id)), media_type="video/mp4")

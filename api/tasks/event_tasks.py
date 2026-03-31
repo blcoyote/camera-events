@@ -9,7 +9,7 @@ def get_events(params: Optional[CameraEventQueryParams] = CameraEventQueryParams
     url = f"{get_settings().frigate_baseurl}/api/events"
     headers = {"Content-Type": "application/json"}
     try:
-        response = requests.get(url, params=params.model_dump(), headers=headers)
+        response = requests.get(url, params=params.model_dump() if params else None, headers=headers)
         response.raise_for_status()
         adapter = pydantic.TypeAdapter(List[CameraEvent])
         data = adapter.validate_python(response.json())
@@ -50,3 +50,23 @@ def get_clip(id: str) -> bytes:
     url = f"{get_settings().frigate_baseurl}/api/events/{id}/clip.mp4"
     response = requests.get(url).content
     return response
+
+
+def get_snapshot_cached(id: str) -> bytes:
+    """Return snapshot bytes, served from MinIO if available, else fetched from Frigate."""
+    from services.minio_service import get_minio_service
+    data = get_minio_service().download(f"{id}/snapshot.jpg")
+    if data is not None:
+        return data
+    logger.debug(f"MinIO cache miss for snapshot {id}, fetching from Frigate")
+    return get_snapshot(id)
+
+
+def get_clip_cached(id: str) -> bytes:
+    """Return clip bytes, served from MinIO if available, else fetched from Frigate."""
+    from services.minio_service import get_minio_service
+    data = get_minio_service().download(f"{id}/clip.mp4")
+    if data is not None:
+        return data
+    logger.debug(f"MinIO cache miss for clip {id}, fetching from Frigate")
+    return get_clip(id)

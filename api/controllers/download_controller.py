@@ -1,7 +1,7 @@
 import io
 from fastapi import APIRouter, Depends
 from firebase.auth import verify_url_token
-from tasks.event_tasks import get_clip, get_latest, get_snapshot
+from tasks.event_tasks import get_clip_cached, get_latest, get_snapshot_cached
 from starlette.responses import StreamingResponse
 
 router = APIRouter(
@@ -15,7 +15,7 @@ router = APIRouter(
 @router.get("/{event_id}/snapshot.jpg", status_code=200)
 async def read_event_snapshot(event_id: str):
     return StreamingResponse(
-        io.BytesIO(get_snapshot(event_id)),
+        io.BytesIO(get_snapshot_cached(event_id)),
         media_type="image/jpg",
         headers={
             "Content-Disposition": f"attachment; filename=snapshot-{event_id}.jpg",
@@ -37,7 +37,7 @@ async def read_event_latest(camera: str):
 @router.get("/{event_id}/clip.mp4", status_code=200)
 async def read_event_clip(event_id: str):
     return StreamingResponse(
-        io.BytesIO(get_clip(event_id)),
+        io.BytesIO(get_clip_cached(event_id)),
         media_type="video/mp4",
         headers={
             "Content-Disposition": f"attachment; filename=clip-{event_id}.mp4",

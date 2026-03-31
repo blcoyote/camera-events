@@ -26,7 +26,7 @@ class EventCacheService:
             str: Unique cache key
         """
         # Create a string representation of the parameters
-        param_dict = params.model_dump() if hasattr(params, 'model_dump') else params.dict()
+        param_dict = params.model_dump()
         # Sort the dictionary to ensure consistent ordering
         sorted_params = sorted(param_dict.items())
         param_string = str(sorted_params)
@@ -72,7 +72,7 @@ class EventCacheService:
         cache_key = self._generate_cache_key(params)
         
         # Convert events to serializable format
-        events_data = [event.model_dump() if hasattr(event, 'model_dump') else event.dict() for event in events]
+        events_data = [event.model_dump() for event in events]
         
         success = self.redis_client.set_cache(cache_key, events_data, self.ttl_seconds)
         
