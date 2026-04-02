@@ -1,22 +1,25 @@
 import asyncio
+from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
-from fastapi import FastAPI, BackgroundTasks
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from lib.prepare_serviceworker import prepare_serviceworker
-from firebase.firebase import get_firebase_app
-from lib.settings import get_settings
 from loguru import logger
-from contextlib import asynccontextmanager
-from tasks.event_polling import poll_for_new_events
-from controllers import (
-    config_controller,
-    download_controller,
-    fcm_controller,
-    notification_controller,
-    event_controller,
+from prometheus_fastapi_instrumentator import Instrumentator  # type: ignore[import-untyped]
+
+from infrastructure.firebase.app import get_firebase_app
+from interfaces.http import (
+    config as config_controller,
+    downloads as download_controller,
+    events as event_controller,
+    fcm as fcm_controller,
+    notifications as notification_controller,
 )
+from interfaces.worker.event_polling import poll_for_new_events
+from lib.prepare_serviceworker import prepare_serviceworker
+from lib.settings import get_settings
 
 logger.add(f"./logs/apilog_{datetime.now().strftime('%Y-%m-%d')}.log", rotation="1 day",
            colorize=False, format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level} | <level>{message}</level>")
@@ -45,6 +48,8 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+Instrumentator().instrument(app).expose(app)
+
 # Active routes (firebase auth)
 app.include_router(download_controller.router)
 app.include_router(event_controller.router)
@@ -56,5 +61,3 @@ app.mount("/", StaticFiles(directory=Path("www"), html=True))
 
 logger.info("Starting Frigate API...")
 firebase_App = get_firebase_app()
-
-background_tasks = BackgroundTasks()

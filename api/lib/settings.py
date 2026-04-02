@@ -1,7 +1,6 @@
 from functools import lru_cache
 from typing import List
 from pydantic_settings import BaseSettings
-from pydantic import ConfigDict, Field
 import os
 
 
@@ -19,7 +18,12 @@ class Settings(BaseSettings):
     frigate_baseurl: str = os.getenv("UVICORN_FRIGATE_BASEURL", "")
     base_url: str = os.getenv("UVICORN_BASEURL", "")
     redis_host: str = os.getenv("UVICORN_REDIS_URL", "")
+    redis_port: int = int(os.getenv("UVICORN_REDIS_PORT", "6379"))
     redis_password: str = os.getenv("UVICORN_REDIS_PASSWORD", "")
+    minio_endpoint: str = os.getenv("MINIO_ENDPOINT", "camera-events-minio:9000")
+    minio_access_key: str = os.getenv("MINIO_ROOT_USER", "")
+    minio_secret_key: str = os.getenv("MINIO_ROOT_PASSWORD", "")
+    minio_bucket: str = os.getenv("MINIO_BUCKET", "camera-events")
     cameras: List[str] = [
         "gavl_vest",
         "garage",

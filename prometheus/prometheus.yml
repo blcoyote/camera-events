@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # FastAPI application metrics via prometheus-fastapi-instrumentator
+  - job_name: fastapi
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['camera-events:80']
+
+  # Redis metrics via redis_exporter sidecar
+  - job_name: redis
+    static_configs:
+      - targets: ['camera-events-redis-exporter:9121']
+
+  # MinIO cluster metrics (MINIO_PROMETHEUS_AUTH_TYPE=public required)
+  - job_name: minio
+    metrics_path: /minio/v2/metrics/cluster
+    static_configs:
+      - targets: ['camera-events-minio:9000']
