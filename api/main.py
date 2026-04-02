@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from loguru import logger
+from prometheus_fastapi_instrumentator import Instrumentator  # type: ignore[import-untyped]
 
 from infrastructure.firebase.app import get_firebase_app
 from interfaces.http import (
@@ -46,6 +47,8 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+Instrumentator().instrument(app).expose(app)
 
 # Active routes (firebase auth)
 app.include_router(download_controller.router)
