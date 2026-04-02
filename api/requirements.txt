@@ -11,4 +11,3 @@ asyncio==3.4.*
 firebase-admin==6.2.*
 redis[hiredis]==5.0.*
 minio==7.2.*
-prometheus-fastapi-instrumentator==7.0.*
