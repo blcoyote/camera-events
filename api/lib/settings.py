@@ -1,12 +1,16 @@
+"""Application settings loaded from environment variables."""
+import os
 from functools import lru_cache
 from typing import List
+
 from pydantic_settings import BaseSettings
-import os
 
 
 @lru_cache()
-def get_settings():
-    return Settings() 
+def get_settings() -> "Settings":
+    """Return the cached :class:`Settings` singleton."""
+    return Settings()
+
 
 class Settings(BaseSettings):
     """
@@ -34,5 +38,5 @@ class Settings(BaseSettings):
         "vaerksted",
     ]
 
-    class Config:
+    class Config:  # pylint: disable=missing-class-docstring
         extra = "allow"

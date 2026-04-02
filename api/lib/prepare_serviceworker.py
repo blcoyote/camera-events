@@ -1,21 +1,23 @@
-from loguru import logger
-from lib.app_config import get_app_config
+"""Utility to inject Firebase config values into the service-worker JS file."""
 from pathlib import Path
 
+from loguru import logger
+
+from lib.app_config import get_app_config
 
 
 @logger.catch
-def prepare_serviceworker():
+def prepare_serviceworker() -> None:
+    """Replace placeholder tokens in the Firebase service-worker with real config values."""
     file = Path("www/firebase-messaging-sw.js")
     if file.is_file():
 
         # Safely read the input filename using 'with'
-        with open(file) as f:
+        with open(file, encoding="utf-8") as f:
             s = f.read()
 
         # Safely write the changed content, if found in the file
-        with open(file, 'w') as f:
-            
+        with open(file, "w", encoding="utf-8") as f:
             s = s.replace("INSERT_API_KEY_HERE", get_app_config().apiKey)
             s = s.replace("INSERT_AUTH_DOMAIN_HERE", get_app_config().authDomain)
             s = s.replace("INSERT_PROJECT_ID_HERE", get_app_config().projectId)

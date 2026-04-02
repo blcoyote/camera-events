@@ -54,7 +54,7 @@ os.environ.setdefault("UVICORN_FIREBASE_CREDENTIALS", _DUMMY_CREDS)
 def redis_container():
     """Start a Redis container for the session. Yields (host, port)."""
     try:
-        from testcontainers.redis import RedisContainer
+        from testcontainers.redis import RedisContainer  # pylint: disable=import-outside-toplevel
         with RedisContainer() as container:
             yield container.get_container_host_ip(), container.get_exposed_port(6379)
     except ImportError:
@@ -69,7 +69,7 @@ def redis_container():
 def minio_container():
     """Start a MinIO container for the session. Yields the endpoint string."""
     try:
-        from testcontainers.minio import MinioContainer
+        from testcontainers.minio import MinioContainer  # pylint: disable=import-outside-toplevel
         with MinioContainer() as container:
             host = container.get_container_host_ip()
             port = container.get_exposed_port(9000)
@@ -83,8 +83,9 @@ def minio_container():
 # ---------------------------------------------------------------------------
 
 @pytest.fixture(scope="session")
-def app(redis_container: tuple[str, int], minio_container: str) -> FastAPI:
+def app(redis_container: tuple[str, int], minio_container: str) -> FastAPI:  # pylint: disable=redefined-outer-name
     """Return the FastAPI app wired to test containers."""
+    # pylint: disable=import-outside-toplevel
     redis_host, redis_port = redis_container
 
     # Point settings at the test containers
@@ -131,7 +132,7 @@ def app(redis_container: tuple[str, int], minio_container: str) -> FastAPI:
 # ---------------------------------------------------------------------------
 
 @pytest_asyncio.fixture()  # type: ignore[misc]
-async def client(app: FastAPI) -> AsyncGenerator[AsyncClient, None]:
+async def client(app: FastAPI) -> AsyncGenerator[AsyncClient, None]:  # pylint: disable=redefined-outer-name
     """Async HTTPX client that speaks directly to the FastAPI app."""
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"

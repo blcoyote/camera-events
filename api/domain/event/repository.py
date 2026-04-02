@@ -61,16 +61,16 @@ class FrigateClientProtocol(Protocol):
         """Return events matching *params*."""
         ...
 
-    def get_event(self, id: str) -> CameraEvent:
+    def get_event(self, event_id: str) -> CameraEvent:
         """Return a single event by ID."""
         ...
 
-    def get_snapshot(self, id: str) -> bytes:
-        """Return snapshot JPEG bytes for event *id*."""
+    def get_snapshot(self, event_id: str) -> bytes:
+        """Return snapshot JPEG bytes for event *event_id*."""
         ...
 
-    def get_clip(self, id: str) -> bytes:
-        """Return clip MP4 bytes for event *id*."""
+    def get_clip(self, event_id: str) -> bytes:
+        """Return clip MP4 bytes for event *event_id*."""
         ...
 
     def get_latest(self, camera: str) -> bytes:

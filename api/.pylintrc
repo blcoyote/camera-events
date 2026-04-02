@@ -1,0 +1,21 @@
+[MASTER]
+# Add the api/ directory to sys.path so all project-internal absolute imports
+# (e.g. ``from domain.event.models import ...``) resolve when pylint is run
+# from within the api/ directory.
+init-hook='import sys; sys.path.insert(0, ".")'
+
+# Ignore virtual-environment and other non-source directories.
+ignore=venv,.venv,dist,build,__pycache__
+
+[FORMAT]
+max-line-length=120
+
+[MESSAGES CONTROL]
+disable=
+    # Protocol/dataclass-style classes legitimately have few public methods.
+    too-few-public-methods,
+    # Dependency-injection constructors legitimately take many arguments.
+    too-many-arguments,
+    too-many-positional-arguments,
+    # ``...`` is the idiomatic body for Protocol abstract methods.
+    unnecessary-ellipsis,

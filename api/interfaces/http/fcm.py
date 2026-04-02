@@ -30,6 +30,6 @@ async def register_fcm(
     """
     try:
         service.register_token(fcm_token)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error(f"Failed to handle FCM token: {e}")
     return {}

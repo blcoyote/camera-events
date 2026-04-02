@@ -47,17 +47,17 @@ class EventService:
         """Fetch events from Frigate matching *params*."""
         return self._frigate.get_events(params)
 
-    def get_event(self, id: str) -> CameraEvent:
-        """Fetch a single event by *id* from Frigate."""
-        return self._frigate.get_event(id)
+    def get_event(self, event_id: str) -> CameraEvent:
+        """Fetch a single event by *event_id* from Frigate."""
+        return self._frigate.get_event(event_id)
 
-    def get_snapshot(self, id: str) -> bytes:
-        """Fetch snapshot JPEG bytes for event *id* directly from Frigate."""
-        return self._frigate.get_snapshot(id)
+    def get_snapshot(self, event_id: str) -> bytes:
+        """Fetch snapshot JPEG bytes for event *event_id* directly from Frigate."""
+        return self._frigate.get_snapshot(event_id)
 
-    def get_clip(self, id: str) -> bytes:
-        """Fetch clip MP4 bytes for event *id* directly from Frigate."""
-        return self._frigate.get_clip(id)
+    def get_clip(self, event_id: str) -> bytes:
+        """Fetch clip MP4 bytes for event *event_id* directly from Frigate."""
+        return self._frigate.get_clip(event_id)
 
     def get_latest(self, camera: str) -> bytes:
         """Fetch the latest frame JPEG bytes for *camera* from Frigate."""
@@ -67,31 +67,31 @@ class EventService:
     # MinIO-cached media
     # ------------------------------------------------------------------
 
-    def get_snapshot_cached(self, id: str) -> bytes:
+    def get_snapshot_cached(self, event_id: str) -> bytes:
         """
         Return snapshot bytes from MinIO when available, falling back to Frigate.
 
         Args:
-            id: Event ID.
+            event_id: Event ID.
         """
-        data = self._media.download(f"{id}/snapshot.jpg")
+        data = self._media.download(f"{event_id}/snapshot.jpg")
         if data is not None:
             return data
-        logger.debug(f"MinIO cache miss for snapshot {id}, fetching from Frigate")
-        return self._frigate.get_snapshot(id)
+        logger.debug(f"MinIO cache miss for snapshot {event_id}, fetching from Frigate")
+        return self._frigate.get_snapshot(event_id)
 
-    def get_clip_cached(self, id: str) -> bytes:
+    def get_clip_cached(self, event_id: str) -> bytes:
         """
         Return clip bytes from MinIO when available, falling back to Frigate.
 
         Args:
-            id: Event ID.
+            event_id: Event ID.
         """
-        data = self._media.download(f"{id}/clip.mp4")
+        data = self._media.download(f"{event_id}/clip.mp4")
         if data is not None:
             return data
-        logger.debug(f"MinIO cache miss for clip {id}, fetching from Frigate")
-        return self._frigate.get_clip(id)
+        logger.debug(f"MinIO cache miss for clip {event_id}, fetching from Frigate")
+        return self._frigate.get_clip(event_id)
 
     @staticmethod
     def get_placeholder() -> bytes:

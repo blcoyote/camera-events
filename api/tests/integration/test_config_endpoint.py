@@ -63,6 +63,7 @@ class TestGetApplicationConfiguration:
 
     @pytest.mark.asyncio
     async def test_content_type_is_json(self, client: AsyncClient) -> None:
+        """Response Content-Type must be application/json."""
         with patch("interfaces.http.config.get_app_config", return_value=_FAKE_CONFIG):
             resp = await client.get("/api/v1/application-configuration")
         assert "application/json" in resp.headers["content-type"]

@@ -4,8 +4,7 @@ Integration tests for /api/v2/downloads/* endpoints.
 Download routes are protected by a URL-query token (verify_url_token).
 These tests verify route wiring, auth enforcement, and content-disposition
 headers — media bytes are patched so the suite has no MinIO dependency.
-"""
-from __future__ import annotations
+"""# pylint: disable=unused-argument  # mock_auth fixtures are used for their side-effects onlyfrom __future__ import annotations
 
 from unittest.mock import patch
 
@@ -47,6 +46,7 @@ class TestDownloadSnapshot:
 
     @pytest.mark.asyncio
     async def test_returns_image_content_type(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Response Content-Type must start with image/."""
         with patch("application.event.service.EventService.get_snapshot_cached", return_value=_FAKE_SNAPSHOT):
             resp = await client.get(
                 "/api/v2/downloads/abc123/snapshot.jpg", params=_auth_params()
@@ -56,6 +56,7 @@ class TestDownloadSnapshot:
 
     @pytest.mark.asyncio
     async def test_unauthorized_without_token(self, client: AsyncClient) -> None:
+        """Request without a token must be rejected (401/403/422)."""
         resp = await client.get("/api/v2/downloads/abc123/snapshot.jpg")
         assert resp.status_code in (401, 403, 422)
 
@@ -69,6 +70,7 @@ class TestDownloadLatest:
 
     @pytest.mark.asyncio
     async def test_returns_attachment_header(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Response must carry a Content-Disposition attachment header."""
         with patch("infrastructure.frigate.client.FrigateClient.get_latest", return_value=_FAKE_SNAPSHOT):
             resp = await client.get(
                 "/api/v2/downloads/front-door/latest.jpg", params=_auth_params()
@@ -79,6 +81,7 @@ class TestDownloadLatest:
 
     @pytest.mark.asyncio
     async def test_unauthorized_without_token(self, client: AsyncClient) -> None:
+        """Request without a token must be rejected (401/403/422)."""
         resp = await client.get("/api/v2/downloads/front-door/latest.jpg")
         assert resp.status_code in (401, 403, 422)
 
@@ -92,6 +95,7 @@ class TestDownloadClip:
 
     @pytest.mark.asyncio
     async def test_returns_attachment_header(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Response must carry a Content-Disposition attachment header."""
         with patch("application.event.service.EventService.get_clip_cached", return_value=_FAKE_CLIP):
             resp = await client.get(
                 "/api/v2/downloads/abc123/clip.mp4", params=_auth_params()
@@ -103,6 +107,7 @@ class TestDownloadClip:
 
     @pytest.mark.asyncio
     async def test_returns_video_content_type(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Response Content-Type must start with video/."""
         with patch("application.event.service.EventService.get_clip_cached", return_value=_FAKE_CLIP):
             resp = await client.get(
                 "/api/v2/downloads/abc123/clip.mp4", params=_auth_params()
@@ -111,5 +116,6 @@ class TestDownloadClip:
 
     @pytest.mark.asyncio
     async def test_unauthorized_without_token(self, client: AsyncClient) -> None:
+        """Request without a token must be rejected (401/403/422)."""
         resp = await client.get("/api/v2/downloads/abc123/clip.mp4")
         assert resp.status_code in (401, 403, 422)

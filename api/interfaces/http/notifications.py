@@ -39,7 +39,7 @@ async def read_notification_image(
         return StreamingResponse(
             io.BytesIO(service.get_placeholder()), media_type="image/png"
         )
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error(f"Error serving notification image: {e}")
         return StreamingResponse(
             io.BytesIO(service.get_placeholder()), media_type="image/png"
