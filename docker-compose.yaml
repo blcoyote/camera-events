@@ -47,6 +47,8 @@ services:
         environment:
             - MINIO_ROOT_USER=$MINIO_ROOT_USER
             - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
+        ports:
+            - 9000:9000
         command: server /data --console-address ":9001"
     camera-events-redis:
         image: redis:latest
