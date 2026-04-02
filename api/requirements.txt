@@ -1,7 +1,7 @@
 fastapi[standard]==0.128.*
 pydantic==2.12.*
 pydantic-settings==2.12.*
-requests==2.32.*
+requests==2.33.*
 loguru==0.7.*
 python-multipart==0.0.22
 python-jose[cryptography]==3.4.*
