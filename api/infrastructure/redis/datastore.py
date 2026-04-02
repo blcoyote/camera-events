@@ -69,6 +69,6 @@ def get_snapshot_id(
     try:
         stored = rdb.get(image_token)
         return str(stored) if stored is not None else ""
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error(f"Failed to get snapshot id for token {image_token}: {e}")
         return ""

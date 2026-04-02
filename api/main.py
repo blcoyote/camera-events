@@ -1,3 +1,4 @@
+"""FastAPI application entry point — mounts routes, middleware, and starts the event-polling worker."""
 import asyncio
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -20,11 +21,14 @@ from interfaces.worker.event_polling import poll_for_new_events
 from lib.prepare_serviceworker import prepare_serviceworker
 from lib.settings import get_settings
 
-logger.add(f"./logs/apilog_{datetime.now().strftime('%Y-%m-%d')}.log", rotation="1 day",
-           colorize=False, format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level} | <level>{message}</level>")
+logger.add(f"./logs/apilog_{datetime.now().strftime('%Y-%m-%d')}.log",
+           rotation="1 day",
+           colorize=False,
+           format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level} | <level>{message}</level>")
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):  # pylint: disable=redefined-outer-name
+    """Start background workers on application startup."""
     asyncio.create_task(poll_for_new_events())
     yield
 
@@ -57,4 +61,4 @@ app.include_router(config_controller.router)
 app.mount("/", StaticFiles(directory=Path("www"), html=True))
 
 logger.info("Starting Frigate API...")
-firebase_App = get_firebase_app()
+FIREBASE_APP = get_firebase_app()

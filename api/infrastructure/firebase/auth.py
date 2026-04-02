@@ -29,16 +29,16 @@ def verify_token(token: str) -> dict[str, Any]:
         claims = auth.verify_id_token(token)
         logger.info(f"Successfully validated token for: {claims['email']}")
         return claims
-    except (ValueError, jwt.exceptions.DecodeError):
-        raise HTTPException(status_code=403, detail="Invalid token")
+    except (ValueError, jwt.exceptions.DecodeError) as exc:
+        raise HTTPException(status_code=403, detail="Invalid token") from exc
     except Exception as e:
         logger.error(f"AppCheckError: {e}")
-        raise HTTPException(status_code=403, detail="Invalid token")
+        raise HTTPException(status_code=403, detail="Invalid token") from e
 
 
-def verify_user_check(X_token: Annotated[str, Header()] = "") -> None:
+def verify_user_check(x_token: Annotated[str, Header(alias="X-Token")] = "") -> None:
     """FastAPI dependency: validate the ``X-Token`` request header."""
-    verify_token(X_token)
+    verify_token(x_token)
 
 
 def verify_url_token(token: Annotated[str | None, Query()] = None) -> None:

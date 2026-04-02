@@ -16,5 +16,12 @@
       "matchCommandLine": true
     },
     "pytest": true
+  },
+  "python.analysis.autoImportCompletions": true,
+  "pylint.cwd": "${workspaceFolder}/api",
+  "pylint.args": ["--init-hook", "import sys; sys.path.insert(0, '${workspaceFolder}/api')"],
+  "python.analysis.extraPaths": ["${workspaceFolder}/api"],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
   }
 }

@@ -4,8 +4,7 @@ Integration tests for /api/v2/events/* endpoints.
 These tests run against a real Redis container (via testcontainers) and mock
 the upstream Frigate HTTP calls so the app exercises the full request/response
 cycle including caching.
-"""
-from __future__ import annotations
+"""# pylint: disable=unused-argument  # mock_auth fixtures are used for their side-effects onlyfrom __future__ import annotations
 
 from unittest.mock import patch
 
@@ -82,6 +81,7 @@ class TestBustEventsCache:
 
     @pytest.mark.asyncio
     async def test_bust_cache_returns_200(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Bust-cache endpoint must return HTTP 200 with a deleted_entries key."""
         resp = await client.delete("/api/v2/events/cache", headers=_AUTH_HEADER)
         assert resp.status_code == 200
         body = resp.json()
@@ -101,6 +101,7 @@ class TestBustEventsCache:
 
     @pytest.mark.asyncio
     async def test_unauthorized_without_header(self, client: AsyncClient) -> None:
+        """Requests without the X-Token header must be rejected."""
         resp = await client.delete("/api/v2/events/cache")
         assert resp.status_code in (401, 403, 422)
 
@@ -114,12 +115,14 @@ class TestReadCameraList:
 
     @pytest.mark.asyncio
     async def test_returns_list(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Endpoint must return an HTTP 200 with a JSON list."""
         resp = await client.get("/api/v2/events/cameras", headers=_AUTH_HEADER)
         assert resp.status_code == 200
         assert isinstance(resp.json(), list)
 
     @pytest.mark.asyncio
     async def test_unauthorized_without_header(self, client: AsyncClient) -> None:
+        """Requests without the X-Token header must be rejected."""
         resp = await client.get("/api/v2/events/cameras")
         assert resp.status_code in (401, 403, 422)
 
@@ -133,6 +136,7 @@ class TestReadEventSnapshot:
 
     @pytest.mark.asyncio
     async def test_returns_image_bytes(self, client: AsyncClient, mock_auth: dict[str, str]) -> None:
+        """Endpoint must return JPEG bytes with image/* content-type."""
         fake_bytes = b"\xff\xd8\xff\xe0" + b"\x00" * 16  # minimal JPEG-like bytes
         with patch("application.event.service.EventService.get_snapshot_cached", return_value=fake_bytes):
             resp = await client.get(
@@ -143,5 +147,6 @@ class TestReadEventSnapshot:
 
     @pytest.mark.asyncio
     async def test_unauthorized_without_header(self, client: AsyncClient) -> None:
+        """Requests without the X-Token header must be rejected."""
         resp = await client.get("/api/v2/events/abc123/snapshot.jpg")
         assert resp.status_code in (401, 403, 422)

@@ -9,10 +9,10 @@ and is called from the FastAPI ``lifespan`` context.
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime, timedelta
 from typing import List, Protocol, runtime_checkable
 
 from loguru import logger
-from datetime import datetime, timedelta
 
 from domain.event.models import CameraEvent, CameraEventQueryParams
 from domain.event.repository import FrigateClientProtocol
@@ -27,19 +27,26 @@ POLLING_INTERVAL = 30
 
 @runtime_checkable
 class _NotifierProtocol(Protocol):
-    def send_topic_push(self, event: CameraEvent) -> None: ...
-    def send_multiple_topic_push(self, events: List[CameraEvent]) -> None: ...
+    def send_topic_push(self, event: CameraEvent) -> None:
+        """Send a push notification for a single event."""
+
+    def send_multiple_topic_push(self, events: List[CameraEvent]) -> None:
+        """Send a push notification for multiple events."""
 
 
 @runtime_checkable
 class _MediaProtocol(Protocol):
-    def exists(self, key: str) -> bool: ...
-    def upload(self, key: str, data: bytes, content_type: str) -> None: ...
+    def exists(self, key: str) -> bool:
+        """Return True if the object identified by *key* exists in storage."""
+
+    def upload(self, key: str, data: bytes, content_type: str) -> None:
+        """Upload *data* to storage under *key* with the given *content_type*."""
 
 
 @runtime_checkable
 class _CacheProtocol(Protocol):
-    def bust_cache(self) -> int: ...
+    def bust_cache(self) -> int:
+        """Invalidate the event list cache and return the number of deleted entries."""
 
 
 # ---------------------------------------------------------------------------
@@ -72,6 +79,7 @@ class EventPoller:
             await asyncio.sleep(self._interval)
 
     async def _fetch_and_process(self) -> None:
+        """Fetch new events from Frigate, mirror media, and dispatch FCM notifications."""
         aftertime = datetime.now() - timedelta(seconds=self._interval)
         params = CameraEventQueryParams()
         params.after = int(aftertime.timestamp())
@@ -82,10 +90,11 @@ class EventPoller:
             events = self._frigate.get_events(params)
             await self.mirror_to_media(events)
             await self.process_events(events)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logger.error(f"Error fetching/processing events: {e}")
 
     async def mirror_to_media(self, events: List[CameraEvent]) -> None:
+        """Mirror snapshot and clip media for *events* to object storage if not already present."""
         if not events:
             return
         for event in events:
@@ -96,7 +105,7 @@ class EventPoller:
                         data = self._frigate.get_snapshot(event.id)
                         self._media.upload(key, data, "image/jpeg")
                         logger.info(f"MinIO: mirrored snapshot for event {event.id}")
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught
                         logger.error(
                             f"MinIO: failed to mirror snapshot for {event.id}: {e}"
                         )
@@ -108,19 +117,20 @@ class EventPoller:
                         data = self._frigate.get_clip(event.id)
                         self._media.upload(key, data, "video/mp4")
                         logger.info(f"MinIO: mirrored clip for event {event.id}")
-                    except Exception as e:
+                    except Exception as e:  # pylint: disable=broad-exception-caught
                         logger.error(
                             f"MinIO: failed to mirror clip for {event.id}: {e}"
                         )
 
     async def process_events(self, events: List[CameraEvent]) -> None:
+        """Send FCM push notifications for *events* and bust the event list cache."""
         try:
             if len(events) == 1:
                 self._notifier.send_topic_push(events[0])
             elif len(events) > 1:
                 logger.info(f"Found {len(events)} events. Pushing to clients")
                 self._notifier.send_multiple_topic_push(events)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logger.error(f"Error sending FCM push: {e}")
 
         if events:
@@ -135,16 +145,18 @@ class EventPoller:
 
 async def poll_for_new_events() -> None:
     """Wire up real dependencies and start the polling loop."""
-    from infrastructure.firebase.app import send_topic_push, send_multiple_topic_push
-    from infrastructure.frigate.client import FrigateClient
-    from infrastructure.minio.client import get_minio_service
-    from infrastructure.redis.cache import get_event_cache_service
+    from infrastructure.firebase.app import send_topic_push, send_multiple_topic_push  # pylint: disable=import-outside-toplevel
+    from infrastructure.frigate.client import FrigateClient  # pylint: disable=import-outside-toplevel
+    from infrastructure.minio.client import get_minio_service  # pylint: disable=import-outside-toplevel
+    from infrastructure.redis.cache import get_event_cache_service  # pylint: disable=import-outside-toplevel
 
-    class _Notifier:
+    class _Notifier:  # pylint: disable=too-few-public-methods
         def send_topic_push(self, event: CameraEvent) -> None:
+            """Delegate to the module-level FCM send function."""
             send_topic_push(event)
 
         def send_multiple_topic_push(self, events: List[CameraEvent]) -> None:
+            """Delegate to the module-level FCM multi-send function."""
             send_multiple_topic_push(events)
 
     poller = EventPoller(

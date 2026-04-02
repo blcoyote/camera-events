@@ -80,7 +80,7 @@ class RedisSetClient:
         try:
             serialized = json.dumps(value, default=str)
             return bool(self.client.setex(key, ttl_seconds, serialized))
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def get_cache(self, key: str) -> Any | None:
@@ -88,9 +88,10 @@ class RedisSetClient:
         try:
             raw = self.client.get(key)
             if raw:
-                return json.loads(raw)  # type: ignore[arg-type]  # redis sync client returns str with decode_responses=True
+                # redis sync client returns str with decode_responses=True
+                return json.loads(raw)  # type: ignore[arg-type]
             return None
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return None
 
     def delete_cache(self, key: str) -> bool:
@@ -106,5 +107,5 @@ class RedisSetClient:
         """
         keys = self.client.keys(pattern)
         if keys:
-            return int(self.client.delete(*keys))  # type: ignore[arg-type, return-value]  # redis sync client stubs
+            return int(self.client.delete(*keys))  # type: ignore[arg-type, return-value]  # redis stubs
         return 0

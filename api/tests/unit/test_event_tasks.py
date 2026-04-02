@@ -23,7 +23,10 @@ def _make_service(
 
 
 class TestGetSnapshotCached:
+    """Tests for EventService.get_snapshot_cached()."""
+
     def test_returns_minio_data_on_hit(self, fake_media: FakeMediaService) -> None:
+        """When MinIO has the file, it must be returned without querying Frigate."""
         fake_media.upload("evt-1/snapshot.jpg", b"jpeg-from-minio", "image/jpeg")
         service = _make_service(fake_media)
 
@@ -55,7 +58,10 @@ class TestGetSnapshotCached:
 
 
 class TestGetClipCached:
+    """Tests for EventService.get_clip_cached()."""
+
     def test_returns_minio_data_on_hit(self, fake_media: FakeMediaService) -> None:
+        """When MinIO has the clip, it must be returned without querying Frigate."""
         fake_media.upload("evt-1/clip.mp4", b"mp4-from-minio", "video/mp4")
         service = _make_service(fake_media)
 

@@ -38,7 +38,8 @@ async def read_event_latest(
     camera: str,
     service: EventService = Depends(get_event_service),
 ) -> StreamingResponse:
-    """Download the latest frame JPEG for *camera* with a ``Content-Disposition: attachment`` header."""
+    """Download the latest frame JPEG for *camera* with a ``Content-Disposition: attachment`` header.
+    """
     return StreamingResponse(
         io.BytesIO(service.get_latest(camera)),
         media_type="image/jpg",
