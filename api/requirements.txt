@@ -3,7 +3,7 @@ pydantic==2.12.*
 pydantic-settings==2.12.*
 requests==2.33.*
 loguru==0.7.*
-python-multipart==0.0.22
+python-multipart==0.0.26
 python-jose[cryptography]==3.4.*
 passlib==1.7.*
 bcrypt==3.2.*
